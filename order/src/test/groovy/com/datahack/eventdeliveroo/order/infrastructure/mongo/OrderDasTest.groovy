@@ -69,7 +69,7 @@ class OrderDasTest extends Specification {
 
         def stubbedOrderMongoAdapter = Stub(OrderMongoAdapter) {
             domain2Document(order) >> orderDocument
-            document2Domain(Mono.just(orderDocument)) >> order
+            document2Domain(_) >> order
         }
 
         def stubbedOrderRepository = Stub(OrderRepository) {
