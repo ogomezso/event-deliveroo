@@ -35,17 +35,12 @@ public class OrderService implements IOrder {
 
     log.debug("place holder");
     Order order = Optional.ofNullable(orderBuilder.createOrder())
-        .orElseThrow(()-> new Exception("order must not be null"));
+        .orElseThrow(() -> new Exception("order must not be null"));
 
     Mono<Order> result = orderDas.saveOrder(order);
 
     orderSender.send(order);
 
     return result;
-  }
-
-  @Override
-  public Order retrieveOrder(String order) {
-    return null;
   }
 }

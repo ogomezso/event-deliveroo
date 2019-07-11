@@ -10,8 +10,6 @@ import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import spock.lang.Specification
 
-import java.time.LocalDateTime
-
 class OrderServiceTest extends Specification {
 
     def stubbedOrderBuilder = Stub(IOrderBuilder)
@@ -20,7 +18,6 @@ class OrderServiceTest extends Specification {
     Order order = Order.builder()
             .id(UUID.randomUUID().toString())
             .orderState(OrderState.ORDERED)
-            .date(LocalDateTime.now())
             .build()
 
     OrderService orderService = new OrderService(stubbedOrderBuilder, mockedOrderSender, stubbedOrderDas)
@@ -35,7 +32,7 @@ class OrderServiceTest extends Specification {
         Mono<Order> result = orderService.placeOrder()
 
         then:
-        1*mockedOrderSender.send(_)
+        1 * mockedOrderSender.send(_)
         StepVerifier.create(result)
                 .expectNext(order)
                 .verifyComplete()
@@ -52,7 +49,7 @@ class OrderServiceTest extends Specification {
 
         then:
         thrown(Exception)
-        0*mockedOrderSender.send(_)
+        0 * mockedOrderSender.send(_)
     }
 
     def "given null orderBuilderResult when placeOrder then exception"() {

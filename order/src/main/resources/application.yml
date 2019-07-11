@@ -4,6 +4,7 @@ spring:
       uri: mongodb://192.168.2.10:27017/test
 
 kafka:
-  security-protocol: PLAINTEXT
   bootstrap-servers: 192.168.2.10:9092
+  security-protocol: PLAINTEXT
   topic: orders
+  groupId: orders

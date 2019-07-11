@@ -7,6 +7,4 @@ import reactor.core.publisher.Mono;
 public interface IOrder {
 
   Mono<Order> placeOrder() throws Exception;
-
-  Order retrieveOrder(String order);
 }

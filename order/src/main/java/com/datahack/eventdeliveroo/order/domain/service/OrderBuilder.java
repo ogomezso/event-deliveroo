@@ -16,7 +16,6 @@ class OrderBuilder implements IOrderBuilder {
 
     return Order.builder()
         .id(UUID.randomUUID().toString())
-        .date(LocalDateTime.now())
         .orderState(OrderState.ORDERED)
         .build();
   }

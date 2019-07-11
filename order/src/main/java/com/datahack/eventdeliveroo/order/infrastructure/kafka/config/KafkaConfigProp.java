@@ -10,7 +10,8 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "kafka")
 public class KafkaConfigProp {
 
-  private String securityProtocol;
   private String bootstrapServers;
+  private String groupId;
+  private String securityProtocol;
   private String topic;
 }

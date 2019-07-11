@@ -18,12 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
-public class KafkaConfig {
+public class KafkaProducerConfig {
 
   private static final String SECURITY_PROTOCOL = "security.protocol";
   private final KafkaConfigProp kafkaConfigProp;
 
-  public KafkaConfig(
+  public KafkaProducerConfig(
       KafkaConfigProp kafkaConfigProp) {
     this.kafkaConfigProp = kafkaConfigProp;
   }
@@ -41,14 +41,13 @@ public class KafkaConfig {
   }
 
   @Bean
-  public ProducerFactory<String, Order> eventTrackerProducerFactory() {
+  public ProducerFactory<String, Order> producerFactory() {
     return new DefaultKafkaProducerFactory<>(producerConfig(), new StringSerializer(),
         new JsonSerializer<>());
   }
 
   @Bean
-  public KafkaTemplate<String, Order> eventTrackerKafkaTemplate() {
-    return new KafkaTemplate<>(eventTrackerProducerFactory());
+  public KafkaTemplate<String, Order> kafkaTemplate() {
+    return new KafkaTemplate<>(producerFactory());
   }
-
 }
