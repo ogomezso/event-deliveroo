@@ -1,4 +1,4 @@
-package com.datahack.eventdeliveroo.order.infrastructure.kafka.config;
+package com.datahack.eventdeliveroo.kitchen.infrastructure.kafka.config;
 
 import java.util.HashMap;
 import java.util.Map;

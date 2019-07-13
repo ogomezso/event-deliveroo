@@ -1,4 +1,4 @@
-package com.datahack.eventdeliveroo.order.domain.model;
+package com.datahack.eventdeliveroo.kitchen.domain.model;
 
 import java.io.Serializable;
 

@@ -1,3 +1,5 @@
+server:
+  port: 8081
 spring:
   data:
     mongodb:
@@ -7,5 +9,5 @@ kafka:
   bootstrap-servers: 192.168.2.10:9092
   security-protocol: PLAINTEXT
   senderTopic: orders
-  listenerTopic: otderStatus
+  listenerTopic: orderStatus
   groupId: orders

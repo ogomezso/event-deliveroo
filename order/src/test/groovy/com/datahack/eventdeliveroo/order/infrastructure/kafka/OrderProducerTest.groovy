@@ -13,6 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.kafka.support.serializer.JsonDeserializer
 import org.springframework.kafka.test.rule.EmbeddedKafkaRule
 import org.springframework.kafka.test.utils.KafkaTestUtils
 import org.springframework.test.annotation.DirtiesContext
@@ -22,7 +23,7 @@ import spock.lang.Specification
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @DirtiesContext
-class OrderSenderTest extends Specification {
+class OrderProducerTest extends Specification {
 
     @ClassRule
     public static EmbeddedKafkaRule embeddedKafka = new EmbeddedKafkaRule(1, true, "sender.t")
@@ -30,7 +31,7 @@ class OrderSenderTest extends Specification {
     static final String SENDER_TOPIC = "sender.t"
 
     @Autowired
-    OrderSender orderSender
+    OrderProducer orderSender
 
     void setup() {
         System.setProperty("kafka.bootstrap-servers", embeddedKafka.getBrokersAsString())
@@ -38,25 +39,24 @@ class OrderSenderTest extends Specification {
         embeddedKafka.before()
     }
 
-    Object consume(String key) {
+    String consume() {
         Map<String, Object> consumerProperties =
                 KafkaTestUtils.consumerProps("sender", "false",
                         embeddedKafka.getEmbeddedKafka())
-        consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
+        consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, String.class)
+        consumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class)
+        consumerProperties.put(JsonDeserializer.TRUSTED_PACKAGES, "*")
         consumerProperties.put("auto.offset.reset", "earliest")
         consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "testGroup")
 
-        Object message = null;
-        KafkaConsumer<String, Order> consumer = new KafkaConsumer<>(consumerProperties)
+        String message = null
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProperties, new StringDeserializer(), new JsonDeserializer<>(String.class))
         consumer.subscribe(Collections.singleton(SENDER_TOPIC))
 
         while (message == null) {
-            ConsumerRecords<String, Order> records = consumer.poll(500);
-            for (ConsumerRecord<String, Order> record : records) {
-
-                if (key == null || record.key() == key) {
-                    message = record.value()
-                }
+            ConsumerRecords<String, String> records = consumer.poll(500)
+            for (ConsumerRecord<String, String> record : records) {
+                message = record.value()
             }
             consumer.commitSync()
         }
@@ -84,9 +84,9 @@ class OrderSenderTest extends Specification {
 
         ObjectMapper mapper = new ObjectMapper()
 
-        Object received = consume(order.orderId)
+        String received = consume()
 
-        received == mapper.writeValueAsString(order)
+        order == mapper.readValue(received, Order.class)
 
     }
 }

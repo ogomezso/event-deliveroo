@@ -3,24 +3,24 @@ package com.datahack.eventdeliveroo.order.infrastructure
 import com.datahack.eventdeliveroo.order.domain.model.Order
 import com.datahack.eventdeliveroo.order.domain.model.OrderState
 import com.datahack.eventdeliveroo.order.domain.service.IOrderBuilder
-import com.datahack.eventdeliveroo.order.infrastructure.kafka.IOrderSender
+import com.datahack.eventdeliveroo.order.infrastructure.kafka.IOrderProducer
 import com.datahack.eventdeliveroo.order.infrastructure.mongo.OrderDas
-import com.datahack.eventdeliveroo.order.infrastructure.service.OrderService
+import com.datahack.eventdeliveroo.order.infrastructure.service.OrderManager
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import spock.lang.Specification
 
-class OrderServiceTest extends Specification {
+class OrderManagerTest extends Specification {
 
     def stubbedOrderBuilder = Stub(IOrderBuilder)
     def stubbedOrderDas = Stub(OrderDas)
-    def mockedOrderSender = Mock(IOrderSender)
+    def mockedOrderSender = Mock(IOrderProducer)
     Order order = Order.builder()
             .orderId(UUID.randomUUID().toString())
             .orderState(OrderState.ORDERED)
             .build()
 
-    OrderService orderService = new OrderService(stubbedOrderBuilder, mockedOrderSender, stubbedOrderDas)
+    OrderManager orderService = new OrderManager(stubbedOrderBuilder, mockedOrderSender, stubbedOrderDas)
 
     def "given correct Order built and das ok response when place order then return the persisted order"() {
 

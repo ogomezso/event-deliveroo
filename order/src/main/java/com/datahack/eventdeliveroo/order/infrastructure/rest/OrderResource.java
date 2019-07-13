@@ -23,15 +23,12 @@ import reactor.core.publisher.Mono;
 public class OrderResource {
 
   private final IOrder orderService;
-  private final EmitterProcessor<Order> emitterProcessor;
   private final OrderDas orderDas;
 
   @Autowired
   public OrderResource(IOrder orderService,
-      EmitterProcessor<Order> emitterProcessor,
       OrderDas orderDas) {
     this.orderService = orderService;
-    this.emitterProcessor = emitterProcessor;
     this.orderDas = orderDas;
   }
 

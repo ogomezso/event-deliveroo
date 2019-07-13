@@ -10,19 +10,18 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.datahack.eventdeliveroo</groupId>
-  <artifactId>orderService</artifactId>
+  <artifactId>kitchen</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>orderService</name>
-  <description>Order Manager Service</description>
+  <name>kitchen</name>
+  <description>Kitchen Service from Datahack Event Deliveroo example</description>
 
   <properties>
     <java.version>1.8</java.version>
-    <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+    <spring-cloud.version>Greenwich.SR2</spring-cloud.version>
   </properties>
 
+  <!-- spring-boot core dependencies-->
   <dependencies>
-
-    <!-- spring-boot core dependencies -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
@@ -33,7 +32,8 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- Reactive Web Dependencies -->
+    <!-- Reactive Web -->
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-webflux</artifactId>
@@ -54,12 +54,6 @@
     <dependency>
       <groupId>org.springframework.kafka</groupId>
       <artifactId>spring-kafka</artifactId>
-    </dependency>
-
-    <!-- Mongo Dependencies -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
     </dependency>
 
     <!-- Utils dependencies -->
@@ -101,18 +95,6 @@
     <dependency>
       <groupId>io.projectreactor</groupId>
       <artifactId>reactor-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.kafka</groupId>
-      <artifactId>spring-kafka-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>de.flapdoodle.embed</groupId>
-      <artifactId>de.flapdoodle.embed.mongo</artifactId>
       <scope>test</scope>
     </dependency>
 

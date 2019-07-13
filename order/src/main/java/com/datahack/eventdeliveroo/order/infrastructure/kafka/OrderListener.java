@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.datahack.eventdeliveroo.order.domain.model.Order;
 import com.datahack.eventdeliveroo.order.domain.model.OrderState;
+import com.datahack.eventdeliveroo.order.infrastructure.kafka.adapter.KafkaAdapter;
 import com.datahack.eventdeliveroo.order.infrastructure.service.IOrder;
 
 import lombok.extern.slf4j.Slf4j;
@@ -14,17 +15,23 @@ import lombok.extern.slf4j.Slf4j;
 class OrderListener {
 
   private final IOrder orderService;
+  private final KafkaAdapter kafkaAdapter;
 
-  OrderListener(IOrder orderService) {
+  OrderListener(IOrder orderService,
+      KafkaAdapter kafkaAdapter) {
     this.orderService = orderService;
+    this.kafkaAdapter = kafkaAdapter;
   }
 
 
   @KafkaListener(topics = "${kafka.listenerTopic}")
-  public void consume(Order order) throws Exception {
+  public void consume(String message) throws Exception {
+
+    Order order = kafkaAdapter.createDomainOrderFromOrderEvent(message);
+    order.setOrderState(OrderState.READY);
+
     log.info("Order Received ID: {}, Status_{}", order.getOrderId(), order.getOrderState());
 
-    order.setOrderState(OrderState.READY);
     orderService.updateOrder(order);
 
   }
