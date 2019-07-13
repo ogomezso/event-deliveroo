@@ -1,21 +1,22 @@
 package com.datahack.eventdeliveroo.order.infrastructure.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.datahack.eventdeliveroo.order.domain.model.Order;
+import com.datahack.eventdeliveroo.order.infrastructure.mongo.OrderDas;
 import com.datahack.eventdeliveroo.order.infrastructure.service.IOrder;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 @Controller
 @Slf4j
@@ -23,12 +24,15 @@ public class OrderResource {
 
   private final IOrder orderService;
   private final EmitterProcessor<Order> emitterProcessor;
+  private final OrderDas orderDas;
 
   @Autowired
   public OrderResource(IOrder orderService,
-      EmitterProcessor<Order> emitterProcessor) {
+      EmitterProcessor<Order> emitterProcessor,
+      OrderDas orderDas) {
     this.orderService = orderService;
     this.emitterProcessor = emitterProcessor;
+    this.orderDas = orderDas;
   }
 
   @PostMapping("/orders")
@@ -38,18 +42,25 @@ public class OrderResource {
 
     return ResponseEntity.ok()
         .body(
-            order.map(Order::getId).doOnNext(m -> log.info("ok!"))
+            order.map(Order::getOrderId).doOnNext(m -> log.info("ok!"))
         );
   }
 
-  @GetMapping("/orders")
-  public ResponseEntity<Flux<Order>> getOrderState() {
+//  @PutMapping(value = "/orders", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+//  public ResponseEntity<Mono<Order>> updateOrderStatus(@RequestBody Order order) throws Exception {
+//    log.info("update Order reource");
+//    return ResponseEntity.ok()
+//        .body(orderService.updateOrder(order)
+//            .doOnNext(r -> log.info("ok")));
+//  }
 
-    log.info("get order state");
 
-    return ResponseEntity.ok().header("X-Accel-Buffering", "no")
-        .body(emitterProcessor.subscribeOn(Schedulers.single())
-            .doOnNext(o -> log.info("Order with Id {} change Status to {}",o.getId(), o.getOrderState().name())));
+  @GetMapping(value = "/orders", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public ResponseEntity<Flux<Order>> orderContiniousQuery() {
+
+    log.info("get order state stream");
+
+    return ResponseEntity.ok().body(orderDas.getOrderStream());
 
   }
 }

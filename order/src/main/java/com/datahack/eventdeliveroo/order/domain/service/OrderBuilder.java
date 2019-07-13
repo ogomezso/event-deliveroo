@@ -1,6 +1,5 @@
 package com.datahack.eventdeliveroo.order.domain.service;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
@@ -15,7 +14,7 @@ class OrderBuilder implements IOrderBuilder {
   public Order createOrder() {
 
     return Order.builder()
-        .id(UUID.randomUUID().toString())
+        .orderId(UUID.randomUUID().toString())
         .orderState(OrderState.ORDERED)
         .build();
   }

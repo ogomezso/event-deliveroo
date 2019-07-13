@@ -1,9 +1,5 @@
 package com.datahack.eventdeliveroo.order.infrastructure.mongo.model;
 
-import javax.validation.constraints.NotEmpty;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,10 +18,9 @@ import lombok.NoArgsConstructor;
 public class OrderDocument {
 
   @Id
-  @NotEmpty
-  private String id;
+  private String documentId;
+  private String orderId;
   private String courierId;
-  private LocalDateTime date;
   private OrderState orderState;
 
 }

@@ -13,5 +13,6 @@ public class KafkaConfigProp {
   private String bootstrapServers;
   private String groupId;
   private String securityProtocol;
-  private String topic;
+  private String senderTopic;
+  private String listenerTopic;
 }

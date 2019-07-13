@@ -33,7 +33,7 @@ public class OrderService implements IOrder {
   @Override
   public Mono<Order> placeOrder() throws Exception {
 
-    log.debug("place holder");
+    log.debug("place order");
     Order order = Optional.ofNullable(orderBuilder.createOrder())
         .orElseThrow(() -> new Exception("order must not be null"));
 
@@ -42,5 +42,16 @@ public class OrderService implements IOrder {
     orderSender.send(order);
 
     return result;
+  }
+
+  @Override
+  public void updateOrder(Order order) {
+
+    log.debug("update order");
+
+    orderDas.saveOrder(order).block();
+
+//    orderSender.send(order);
+
   }
 }

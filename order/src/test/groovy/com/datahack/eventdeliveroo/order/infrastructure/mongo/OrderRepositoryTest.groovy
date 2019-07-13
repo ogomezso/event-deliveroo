@@ -2,16 +2,20 @@ package com.datahack.eventdeliveroo.order.infrastructure.mongo
 
 import com.datahack.eventdeliveroo.order.domain.model.OrderState
 import com.datahack.eventdeliveroo.order.infrastructure.mongo.model.OrderDocument
-import org.reactivestreams.Publisher
+import de.flapdoodle.embed.mongo.MongodExecutable
+import de.flapdoodle.embed.mongo.MongodStarter
+import de.flapdoodle.embed.mongo.config.IMongodConfig
+import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
+import de.flapdoodle.embed.mongo.config.Net
+import de.flapdoodle.embed.mongo.distribution.Version
+import de.flapdoodle.embed.process.runtime.Network
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.dao.DuplicateKeyException
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import spock.lang.Specification
-
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @DataMongoTest
 class OrderRepositoryTest extends Specification {
@@ -19,6 +23,21 @@ class OrderRepositoryTest extends Specification {
     @Autowired
     OrderRepository orderRepository
 
+    private MongodExecutable mongodExecutable;
+
+    def document = OrderDocument.builder()
+            .documentId(UUID.randomUUID().toString())
+            .orderId(UUID.randomUUID().toString())
+            .courierId(UUID.randomUUID().toString())
+            .orderState(OrderState.ORDERED)
+            .build()
+
+    def document2 = OrderDocument.builder()
+            .documentId(UUID.randomUUID().toString())
+            .orderId(UUID.randomUUID().toString())
+            .courierId(UUID.randomUUID().toString())
+            .orderState(OrderState.ORDERED)
+            .build()
 
     def cleanup() {
         StepVerifier
@@ -28,18 +47,9 @@ class OrderRepositoryTest extends Specification {
 
     def "given correct document when save then mono of document returned"() {
 
-        given:
-
-        OrderDocument document = OrderDocument.builder()
-                .id(UUID.randomUUID().toString())
-                .date(LocalDateTime.now())
-                .courierId(UUID.randomUUID().toString())
-                .orderState(OrderState.ORDERED)
-                .build()
-
         when:
 
-        Publisher<OrderDocument> result = orderRepository.save(document)
+        Mono<OrderDocument> result = orderRepository.save(document)
 
         then:
 
@@ -50,66 +60,53 @@ class OrderRepositoryTest extends Specification {
 
     def "given 2 different documents when save then 2 documents stored "() {
 
-        given:
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime localDateTime = LocalDateTime.now()
-        String formatDateTime = localDateTime.format(formatter)
-
-
-        OrderDocument document = OrderDocument.builder()
-                .id(UUID.randomUUID().toString())
-                .date(LocalDateTime.parse(formatDateTime, formatter))
-                .courierId(UUID.randomUUID().toString())
-                .orderState(OrderState.ORDERED)
-                .build()
-
-        OrderDocument document2 = OrderDocument.builder()
-                .id(UUID.randomUUID().toString())
-                .date(LocalDateTime.parse(formatDateTime, formatter))
-                .courierId(UUID.randomUUID().toString())
-                .orderState(OrderState.ORDERED)
-                .build()
-
         when:
 
-        Publisher<OrderDocument> result = orderRepository.saveAll(Flux.just(document, document2))
-
-        then:
-
-        StepVerifier
-                .create(result)
-                .expectNext(document, document2)
-                .verifyComplete()
-
-    }
-
-
-    def "given same document 2 times when save then just one saved and duplicate key exception returned"() {
-        given:
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime localDateTime = LocalDateTime.now()
-        String formatDateTime = localDateTime.format(formatter)
-
-
-        OrderDocument document = OrderDocument.builder()
-                .id(UUID.randomUUID().toString())
-                .date(LocalDateTime.parse(formatDateTime, formatter))
-                .courierId(UUID.randomUUID().toString())
-                .orderState(OrderState.ORDERED)
-                .build()
-
-        when:
-
-        Publisher<OrderDocument> result = orderRepository.saveAll(Arrays.asList(document, document))
+        Mono<OrderDocument> result = orderRepository.save(document)
 
         then:
 
         StepVerifier
                 .create(result)
                 .expectNext(document)
-                .expectError()
+                .verifyComplete()
+
+        when:
+
+        Mono<OrderDocument> result2 = orderRepository.save(document2)
+
+        then:
+
+        StepVerifier
+                .create(result2)
+                .expectNext(document2)
+                .verifyComplete()
+
+    }
+
+
+    def "given same document 2 times when save then just one saved and duplicate key exception returned"() {
+
+        when:
+
+        Mono<OrderDocument> result = orderRepository.save(document)
+
+        then:
+
+        StepVerifier
+                .create(result)
+                .expectNext(document)
+                .verifyComplete()
+
+        when:
+
+        Mono<OrderDocument> result2 = orderRepository.save(document)
+
+        then:
+
+        StepVerifier
+                .create(result2)
+                .expectError(DuplicateKeyException)
     }
 
     def "given null document when save then error"() {

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Order {
 
-  private String id;
+  private String orderId;
   private String courierId;
   private OrderState orderState;
 }

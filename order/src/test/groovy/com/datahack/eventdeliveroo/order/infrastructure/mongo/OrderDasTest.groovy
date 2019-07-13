@@ -3,30 +3,40 @@ package com.datahack.eventdeliveroo.order.infrastructure.mongo
 import com.datahack.eventdeliveroo.order.domain.model.Order
 import com.datahack.eventdeliveroo.order.domain.model.OrderState
 import com.datahack.eventdeliveroo.order.infrastructure.mongo.model.OrderDocument
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import spock.lang.Specification
 
-import java.time.LocalDateTime
-
 class OrderDasTest extends Specification {
+
+    def order = Order.builder()
+            .orderId(UUID.randomUUID().toString())
+            .courierId(UUID.randomUUID().toString())
+            .orderState(OrderState.READY)
+            .build()
+
+    def order2 = Order.builder()
+            .orderId(order.getOrderId())
+            .courierId(order.getCourierId())
+            .orderState(OrderState.DELIVERED)
+            .build()
+    def orderDocument = OrderDocument.builder()
+            .orderId(order.getOrderId())
+            .courierId(order.getCourierId())
+            .orderState(order.getOrderState())
+            .build()
+
+    def orderDocument2 = OrderDocument.builder()
+            .orderId(order2.getOrderId())
+            .courierId(order2.getCourierId())
+            .orderState(order2.getOrderState())
+            .build()
+
 
     def "given Order domain object when PersistOrder then return Object Domain persisted"() {
 
         given:
-
-        def order = Order.builder()
-                .id(UUID.randomUUID().toString())
-                .courierId(UUID.randomUUID().toString())
-                .date(LocalDateTime.now())
-                .orderState(OrderState.READY)
-                .build()
-        def orderDocument = OrderDocument.builder()
-                .id(order.getId())
-                .courierId(order.getCourierId())
-                .date(order.getDate())
-                .orderState(order.getOrderState())
-                .build()
 
         def stubbedOrderMongoAdapter = Stub(OrderMongoAdapter) {
             domain2Document(order) >> orderDocument
@@ -50,30 +60,17 @@ class OrderDasTest extends Specification {
                 .verifyComplete()
     }
 
-    def "given duplicated Order domain object when PersistOrder then return Object Domain persisted"() {
+
+    def "when PersistOrder throw exception then Exception thrown"() {
 
         given:
 
-        def order = Order.builder()
-                .id(UUID.randomUUID().toString())
-                .courierId(UUID.randomUUID().toString())
-                .date(LocalDateTime.now())
-                .orderState(OrderState.READY)
-                .build()
-        def orderDocument = OrderDocument.builder()
-                .id(order.getId())
-                .courierId(order.getCourierId())
-                .date(order.getDate())
-                .orderState(order.getOrderState())
-                .build()
-
         def stubbedOrderMongoAdapter = Stub(OrderMongoAdapter) {
             domain2Document(order) >> orderDocument
-            document2Domain(_) >> order
         }
 
         def stubbedOrderRepository = Stub(OrderRepository) {
-            save(_) >> { throw new Exception("Duplicated Order") }
+            save(_) >> { throw new Exception("Repository Exception") }
         }
 
         OrderDas orderDas = new OrderDas(stubbedOrderMongoAdapter, stubbedOrderRepository)
@@ -85,10 +82,38 @@ class OrderDasTest extends Specification {
         then:
 
         thrown(Exception)
+    }
 
+    def "when getOrderStream then return all Order domain objects"() {
+
+        given:
+
+        def stubbedOrderMongoAdapter = Stub(OrderMongoAdapter) {
+            domain2Document(order) >> orderDocument
+            domain2Document(order2) >> orderDocument2
+            document2Domain(orderDocument) >> order
+            document2Domain(orderDocument2) >> order2
+        }
+
+        def stubbedOrderRepository = Stub(OrderRepository) {
+            save(orderDocument) >> Mono.just(order)
+            save(orderDocument2) >> Mono.just(order2)
+            findOrderDocumentBy() >> Flux.just(orderDocument,orderDocument2)
+        }
+
+        OrderDas orderDas = new OrderDas(stubbedOrderMongoAdapter, stubbedOrderRepository)
+
+        when:
+
+        Flux<Order> stream = orderDas.getOrderStream()
+
+        then:
+
+        StepVerifier.create(stream)
+                .expectNext(order)
+                .expectNext(order2)
+                .verifyComplete()
 
     }
 
-    def "RetrieveOrder"() {
-    }
 }

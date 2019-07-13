@@ -30,19 +30,18 @@ class OrderSender implements IOrderSender {
     log.info("OrderSender.send {}", order);
 
     ListenableFuture<SendResult<String, Order>> resultFuture = kafkaTemplate
-        .send(kafkaConfigProp.getTopic(), order.getId(), order);
+        .send(kafkaConfigProp.getSenderTopic(), order.getOrderId(), order);
 
     resultFuture.addCallback(new ListenableFutureCallback<SendResult<String, Order>>() {
       @Override
       public void onFailure(Throwable throwable) {
-        log.error("Unable to Send Order with Id: {}", order.getId());
+        log.error("Unable to Send Order with Id: {}", order.getOrderId());
       }
 
       @Override
       public void onSuccess(SendResult<String, Order> result) {
-        log.info("Order with id:{} send to kitchen. Event Offset: {}", order.getId(),
+        log.info("Order with orderId:{} send to kitchen. Event Offset: {}", order.getOrderId(),
             result.getRecordMetadata().offset());
-
       }
     });
 

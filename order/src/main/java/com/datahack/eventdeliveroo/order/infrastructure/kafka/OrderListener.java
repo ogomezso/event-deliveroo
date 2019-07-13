@@ -1,34 +1,31 @@
 package com.datahack.eventdeliveroo.order.infrastructure.kafka;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import com.datahack.eventdeliveroo.order.domain.model.Order;
+import com.datahack.eventdeliveroo.order.domain.model.OrderState;
+import com.datahack.eventdeliveroo.order.infrastructure.service.IOrder;
 
 import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.EmitterProcessor;
-import reactor.core.publisher.FluxSink;
 
 @Component
 @Slf4j
 class OrderListener {
 
-  private EmitterProcessor<Order> emitterProcessor;
+  private final IOrder orderService;
 
-  @Autowired
-  OrderListener(
-      EmitterProcessor<Order> emitterProcessor) {
-    this.emitterProcessor = emitterProcessor;
+  OrderListener(IOrder orderService) {
+    this.orderService = orderService;
   }
 
-  @KafkaListener(topics = "${kafka.topic}")
-  public void consume(Order order) {
-    log.info("Order Received ID: {}, Status_{}", order.getId(), order.getOrderState());
 
-    FluxSink<Order> incoming = this.emitterProcessor.sink();
+  @KafkaListener(topics = "${kafka.listenerTopic}")
+  public void consume(Order order) throws Exception {
+    log.info("Order Received ID: {}, Status_{}", order.getOrderId(), order.getOrderState());
 
-    incoming.next(order);
+    order.setOrderState(OrderState.READY);
+    orderService.updateOrder(order);
 
   }
 }

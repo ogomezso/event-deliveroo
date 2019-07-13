@@ -61,3 +61,5 @@ Con esto tendremos en nuestro entorno local:
 
    * Un cluster de Kafka listo para recibir peticiones
    * Una instancia de MongoDB que usaremos como base de datos de nuestros Servicios Query
+
+db.createCollection( "orders", { capped: true, size: 100000 } )

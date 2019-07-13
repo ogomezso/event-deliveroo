@@ -19,8 +19,6 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.junit4.SpringRunner
 import spock.lang.Specification
 
-import java.time.LocalDateTime
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @DirtiesContext
@@ -35,7 +33,8 @@ class OrderSenderTest extends Specification {
     OrderSender orderSender
 
     void setup() {
-        System.setProperty("kafka.bootstrap-servers", embeddedKafka.getBrokersAsString());
+        System.setProperty("kafka.bootstrap-servers", embeddedKafka.getBrokersAsString())
+        System.setProperty("kafka.groupId", "orders")
         embeddedKafka.before()
     }
 
@@ -45,6 +44,7 @@ class OrderSenderTest extends Specification {
                         embeddedKafka.getEmbeddedKafka())
         consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
         consumerProperties.put("auto.offset.reset", "earliest")
+        consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "testGroup")
 
         Object message = null;
         KafkaConsumer<String, Order> consumer = new KafkaConsumer<>(consumerProperties)
@@ -54,7 +54,7 @@ class OrderSenderTest extends Specification {
             ConsumerRecords<String, Order> records = consumer.poll(500);
             for (ConsumerRecord<String, Order> record : records) {
 
-                if (key == null || record.key().equals(key)) {
+                if (key == null || record.key() == key) {
                     message = record.value()
                 }
             }
@@ -70,9 +70,8 @@ class OrderSenderTest extends Specification {
         given:
 
         def order = Order.builder()
-                .id(UUID.randomUUID().toString())
+                .orderId(UUID.randomUUID().toString())
                 .courierId(UUID.randomUUID().toString())
-                .date(LocalDateTime.now())
                 .orderState(OrderState.READY)
                 .build()
 
@@ -85,7 +84,7 @@ class OrderSenderTest extends Specification {
 
         ObjectMapper mapper = new ObjectMapper()
 
-        Object received = consume(order.id)
+        Object received = consume(order.orderId)
 
         received == mapper.writeValueAsString(order)
 

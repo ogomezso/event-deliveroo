@@ -6,5 +6,6 @@ spring:
 kafka:
   bootstrap-servers: 192.168.2.10:9092
   security-protocol: PLAINTEXT
-  topic: orders
+  senderTopic: orders
+  listenerTopic: otderStatus
   groupId: orders

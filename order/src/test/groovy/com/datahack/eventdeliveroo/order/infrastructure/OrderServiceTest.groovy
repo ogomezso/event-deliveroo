@@ -16,7 +16,7 @@ class OrderServiceTest extends Specification {
     def stubbedOrderDas = Stub(OrderDas)
     def mockedOrderSender = Mock(IOrderSender)
     Order order = Order.builder()
-            .id(UUID.randomUUID().toString())
+            .orderId(UUID.randomUUID().toString())
             .orderState(OrderState.ORDERED)
             .build()
 
