@@ -141,11 +141,11 @@
       <plugin>
         <groupId>org.codehaus.gmavenplus</groupId>
         <artifactId>gmavenplus-plugin</artifactId>
-        <version>1.6</version>
+        <version>1.5</version>
         <executions>
           <execution>
             <goals>
-              <goal>compileTests</goal>
+              <goal>testCompile</goal>
             </goals>
           </execution>
         </executions>

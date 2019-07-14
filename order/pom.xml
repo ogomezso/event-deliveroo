@@ -10,9 +10,9 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.datahack.eventdeliveroo</groupId>
-  <artifactId>orderService</artifactId>
+  <artifactId>order</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>orderService</name>
+  <name>order</name>
   <description>Order Manager Service</description>
 
   <properties>
@@ -147,17 +147,12 @@
       <plugin>
         <groupId>org.codehaus.gmavenplus</groupId>
         <artifactId>gmavenplus-plugin</artifactId>
-        <version>1.6</version>
+        <version>1.5</version>
         <executions>
           <execution>
             <goals>
-              <goal>compileTests</goal>
+              <goal>testCompile</goal>
             </goals>
-            <configuration>
-              <sources>
-                <source>/test/java/**</source>
-              </sources>
-            </configuration>
           </execution>
         </executions>
       </plugin>

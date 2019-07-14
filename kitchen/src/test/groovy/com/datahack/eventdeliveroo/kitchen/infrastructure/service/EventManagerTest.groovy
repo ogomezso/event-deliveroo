@@ -10,16 +10,13 @@ class EventManagerTest extends Specification {
 
     IOrder stubbedOrder = Stub(IOrder)
     IKitchenProducer mockedKitchenProducer = Mock(IKitchenProducer)
-    IKitchenProducer stubbedKitchenProducer = Stub(IKitchenProducer)
 
     def order = Order.builder()
             .orderId(UUID.randomUUID().toString())
-            .courierId(UUID.randomUUID().toString())
             .orderState(OrderState.ORDERED)
             .build()
     def updatedOrder = Order.builder()
             .orderId(order.orderId)
-            .courierId(order.courierId)
             .orderState(OrderState.READY)
             .build()
 

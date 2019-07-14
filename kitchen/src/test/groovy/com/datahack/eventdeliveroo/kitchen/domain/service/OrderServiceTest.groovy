@@ -10,7 +10,6 @@ class OrderServiceTest extends Specification {
 
     def order = Order.builder()
             .orderId(UUID.randomUUID().toString())
-            .courierId(UUID.randomUUID().toString())
             .orderState(OrderState.ORDERED)
             .build()
 
@@ -23,7 +22,6 @@ class OrderServiceTest extends Specification {
         then:
 
         result.orderId == order.orderId
-        result.courierId == order.courierId
         result.orderState == OrderState.READY
 
 
