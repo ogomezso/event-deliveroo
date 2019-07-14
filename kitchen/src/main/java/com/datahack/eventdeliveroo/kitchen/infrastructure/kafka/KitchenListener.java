@@ -6,6 +6,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import com.datahack.eventdeliveroo.kitchen.domain.model.Order;
+import com.datahack.eventdeliveroo.kitchen.domain.model.OrderState;
 import com.datahack.eventdeliveroo.kitchen.infrastructure.kafka.adapter.KafkaAdapter;
 import com.datahack.eventdeliveroo.kitchen.infrastructure.service.IEventManager;
 
@@ -32,7 +33,10 @@ class KitchenListener {
 
     log.info("Order Received ID: {}, Status_{}", order.getOrderId(), order.getOrderState());
 
-    eventManager.manageEvent(order);
+    if (order.getOrderState().equals(OrderState.ORDERED)) {
+
+      eventManager.manageEvent(order);
+    }
 
   }
 

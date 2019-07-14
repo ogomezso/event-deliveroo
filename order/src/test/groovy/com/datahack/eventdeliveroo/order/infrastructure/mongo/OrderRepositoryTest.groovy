@@ -3,16 +3,9 @@ package com.datahack.eventdeliveroo.order.infrastructure.mongo
 import com.datahack.eventdeliveroo.order.domain.model.OrderState
 import com.datahack.eventdeliveroo.order.infrastructure.mongo.model.OrderDocument
 import de.flapdoodle.embed.mongo.MongodExecutable
-import de.flapdoodle.embed.mongo.MongodStarter
-import de.flapdoodle.embed.mongo.config.IMongodConfig
-import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
-import de.flapdoodle.embed.mongo.config.Net
-import de.flapdoodle.embed.mongo.distribution.Version
-import de.flapdoodle.embed.process.runtime.Network
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.dao.DuplicateKeyException
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import spock.lang.Specification
@@ -28,14 +21,12 @@ class OrderRepositoryTest extends Specification {
     def document = OrderDocument.builder()
             .documentId(UUID.randomUUID().toString())
             .orderId(UUID.randomUUID().toString())
-            .courierId(UUID.randomUUID().toString())
             .orderState(OrderState.ORDERED)
             .build()
 
     def document2 = OrderDocument.builder()
             .documentId(UUID.randomUUID().toString())
             .orderId(UUID.randomUUID().toString())
-            .courierId(UUID.randomUUID().toString())
             .orderState(OrderState.ORDERED)
             .build()
 

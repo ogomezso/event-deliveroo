@@ -14,6 +14,5 @@ import lombok.NoArgsConstructor;
 public class Order implements Serializable {
 
   private String orderId;
-  private String courierId;
   private OrderState orderState;
 }

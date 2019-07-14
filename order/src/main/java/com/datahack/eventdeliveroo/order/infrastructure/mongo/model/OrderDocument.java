@@ -20,7 +20,6 @@ public class OrderDocument {
   @Id
   private String documentId;
   private String orderId;
-  private String courierId;
   private OrderState orderState;
 
 }

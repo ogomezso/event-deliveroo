@@ -1,4 +1,4 @@
-package com.datahack.eventdeliveroo.kitchen.infrastructure.kafka.config;
+package com.datahack.eventdeliveroo.delivey.infrastructure.kafka.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,12 +13,18 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
+import com.datahack.eventdeliveroo.delivey.domain.model.Order;
+
+import reactor.core.publisher.EmitterProcessor;
+
+
 @Configuration
 @EnableKafka
 public class KafkaConsumerConfig {
 
 
   private final KafkaConfigProp kafkaConfigProp;
+
 
   @Autowired
   public KafkaConsumerConfig(
@@ -52,6 +58,16 @@ public class KafkaConsumerConfig {
     factory.setConsumerFactory(consumerFactory());
 
     return factory;
+  }
+
+  @Bean
+  EmitterProcessor<String> stringEmitterProcessor() {
+    return EmitterProcessor.create(false);
+  }
+
+  @Bean
+  EmitterProcessor<Order> orderEmitterProcessor() {
+    return EmitterProcessor.create(false);
   }
 
 }

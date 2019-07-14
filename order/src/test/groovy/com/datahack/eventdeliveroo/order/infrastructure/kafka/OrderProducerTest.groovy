@@ -71,7 +71,6 @@ class OrderProducerTest extends Specification {
 
         def order = Order.builder()
                 .orderId(UUID.randomUUID().toString())
-                .courierId(UUID.randomUUID().toString())
                 .orderState(OrderState.READY)
                 .build()
 

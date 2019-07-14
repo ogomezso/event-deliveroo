@@ -4,7 +4,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import com.datahack.eventdeliveroo.order.domain.model.Order;
-import com.datahack.eventdeliveroo.order.domain.model.OrderState;
 import com.datahack.eventdeliveroo.order.infrastructure.kafka.adapter.KafkaAdapter;
 import com.datahack.eventdeliveroo.order.infrastructure.service.IOrder;
 
@@ -28,7 +27,6 @@ class OrderListener {
   public void consume(String message) throws Exception {
 
     Order order = kafkaAdapter.createDomainOrderFromOrderEvent(message);
-    order.setOrderState(OrderState.READY);
 
     log.info("Order Received ID: {}, Status_{}", order.getOrderId(), order.getOrderState());
 

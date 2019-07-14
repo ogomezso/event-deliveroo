@@ -1,7 +1,0 @@
-server:
-  port: 8083
-kafka:
-  bootstrap-servers: 192.168.2.10:9092
-  security-protocol: PLAINTEXT
-  senderTopic: couriers
-  groupId: courier

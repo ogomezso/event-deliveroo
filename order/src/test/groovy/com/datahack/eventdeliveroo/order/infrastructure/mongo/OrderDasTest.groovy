@@ -12,24 +12,20 @@ class OrderDasTest extends Specification {
 
     def order = Order.builder()
             .orderId(UUID.randomUUID().toString())
-            .courierId(UUID.randomUUID().toString())
             .orderState(OrderState.READY)
             .build()
 
     def order2 = Order.builder()
             .orderId(order.getOrderId())
-            .courierId(order.getCourierId())
             .orderState(OrderState.DELIVERED)
             .build()
     def orderDocument = OrderDocument.builder()
             .orderId(order.getOrderId())
-            .courierId(order.getCourierId())
             .orderState(order.getOrderState())
             .build()
 
     def orderDocument2 = OrderDocument.builder()
             .orderId(order2.getOrderId())
-            .courierId(order2.getCourierId())
             .orderState(order2.getOrderState())
             .build()
 
