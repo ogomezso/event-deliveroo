@@ -10,7 +10,7 @@ spring:
   zipkin:
     service:
       name: kitchen
-    base-url: http://192.168.2.10:9411/zipkin
+    baseUrl: http://192.168.2.10:9411/
   application:
     name: kitchen
   sleuth:
@@ -18,6 +18,7 @@ spring:
       probability: 1.0
     web:
       skip-pattern: (^cleanup.*)
+    enabled: true
 management:
   endpoint:
     metrics:
