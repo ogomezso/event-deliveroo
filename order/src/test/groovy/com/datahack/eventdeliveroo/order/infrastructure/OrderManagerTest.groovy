@@ -12,21 +12,21 @@ import spock.lang.Specification
 
 class OrderManagerTest extends Specification {
 
-    def stubbedOrderBuilder = Stub(IOrderBuilder)
-    def stubbedOrderDas = Stub(OrderDas)
+    def mockedOrderBuilder = Mock(IOrderBuilder)
+    def mockedOrderDas = Mock(OrderDas)
     def mockedOrderSender = Mock(IOrderProducer)
     Order order = Order.builder()
             .orderId(UUID.randomUUID().toString())
             .orderState(OrderState.ORDERED)
             .build()
 
-    OrderManager orderService = new OrderManager(stubbedOrderBuilder, mockedOrderSender, stubbedOrderDas)
+    OrderManager orderService = new OrderManager(mockedOrderBuilder, mockedOrderSender, mockedOrderDas)
 
     def "given correct Order built and das ok response when place order then return the persisted order"() {
 
         given:
-        stubbedOrderBuilder.createOrder() >> order
-        stubbedOrderDas.saveOrder(order) >> Mono.just(order)
+        mockedOrderBuilder.createOrder() >> order
+        mockedOrderDas.saveOrder(order) >> Mono.just(order)
 
         when:
         Mono<Order> result = orderService.placeOrder()
@@ -41,8 +41,8 @@ class OrderManagerTest extends Specification {
     def "given Order built and das ko response when place order then exception and no message send"() {
 
         given:
-        stubbedOrderBuilder.createOrder() >> order
-        stubbedOrderDas.saveOrder(order) >> { throw new Exception("Duplicated Order") }
+        mockedOrderBuilder.createOrder() >> order
+        mockedOrderDas.saveOrder(order) >> { throw new Exception("Duplicated Order") }
 
         when:
         orderService.placeOrder()
@@ -55,7 +55,7 @@ class OrderManagerTest extends Specification {
     def "given null orderBuilderResult when placeOrder then exception"() {
 
         given:
-        stubbedOrderBuilder.createOrder() >> null
+        mockedOrderBuilder.createOrder() >> null
 
         when:
         orderService.placeOrder()
