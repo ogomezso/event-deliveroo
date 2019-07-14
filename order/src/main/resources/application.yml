@@ -4,10 +4,34 @@ spring:
   data:
     mongodb:
       uri: mongodb://192.168.2.10:27017/test
-
+  zipkin:
+    service:
+      name: orders
+    base-url: http://192.168.2.10:9411/zipkin
+  application:
+    name: orders
+  sleuth:
+    sampler:
+      probability: 1.0
+    web:
+      skip-pattern: (^cleanup.*)
 kafka:
   bootstrap-servers: 192.168.2.10:9092
   security-protocol: PLAINTEXT
   senderTopic: orders
   listenerTopic: orderStatus
   groupId: orders
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true

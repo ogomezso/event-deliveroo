@@ -1,18 +1,17 @@
 server:
-  port: 8082
+  port: 8083
 kafka:
   bootstrap-servers: 192.168.2.10:9092
   security-protocol: PLAINTEXT
-  senderTopic: orderStatus
-  listenerTopic: orders
-  groupId: kitchen
+  topic: orderStatus
+  groupId: deliveries
 spring:
   zipkin:
     service:
-      name: kitchen
+      name: delivery
     base-url: http://192.168.2.10:9411/zipkin
   application:
-    name: kitchen
+    name: delivery
   sleuth:
     sampler:
       probability: 1.0

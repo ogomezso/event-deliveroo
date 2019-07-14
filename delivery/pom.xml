@@ -21,6 +21,8 @@
   </properties>
 
   <dependencies>
+
+    <!-- spring-boot core dependencies -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
@@ -31,8 +33,7 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- Reactive Web -->
-
+    <!-- Reactive Web Dependencies -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-webflux</artifactId>
@@ -48,6 +49,15 @@
       <artifactId>spring-cloud-starter-zipkin</artifactId>
     </dependency>
 
+    <!-- Metrics Dependencies  -->
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+    </dependency>
 
     <!-- Kafka Dependencies -->
     <dependency>
@@ -96,6 +106,13 @@
       <artifactId>reactor-test</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.springframework.kafka</groupId>
+      <artifactId>spring-kafka-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <dependencyManagement>
@@ -135,5 +152,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

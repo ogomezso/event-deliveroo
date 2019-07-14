@@ -51,7 +51,9 @@ $ minikube dasboard
 ## CREAR INFRAESTRUCTURA
 
 ````
-$ docker network create --driver=bridge --subnet=192.168.2.0/24 --gateway=192.168.2.10 event-deliveroo-network
+$ docker network create --driver=bridge --subnet=192.168.2.0/24 --gateway=192.168.2.10 event-deliveroo-env-network
+
+$ docker network create --driver=bridge --subnet=192.168.3.0/24 --gateway=192.168.3.10 event-deliveroo-app-network
 
 $ cd infrastructure
 

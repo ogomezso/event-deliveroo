@@ -16,7 +16,7 @@
   <description>Order Manager Service</description>
 
   <properties>
-    <java.version>1.8</java.version>
+    <java.version>11</java.version>
     <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
   </properties>
 
@@ -49,6 +49,15 @@
       <artifactId>spring-cloud-starter-zipkin</artifactId>
     </dependency>
 
+    <!-- Metrics Dependencies  -->
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+    </dependency>
 
     <!-- Kafka Dependencies -->
     <dependency>
@@ -129,7 +138,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
   <build>
     <plugins>
       <plugin>
@@ -145,6 +153,11 @@
             <goals>
               <goal>compileTests</goal>
             </goals>
+            <configuration>
+              <sources>
+                <source>/test/java/**</source>
+              </sources>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -155,5 +168,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

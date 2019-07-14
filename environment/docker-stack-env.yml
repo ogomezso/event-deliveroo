@@ -11,14 +11,14 @@ services:
       - 27017:27017
     command: mongod --smallfiles
     networks:
-      - event-deliveroo-network
+      - event-deliveroo-env-network
   zookeeper:
     image: wurstmeister/zookeeper
     hostname: zk
     ports:
       - "2181:2181"
     networks:
-      - event-deliveroo-network
+      - event-deliveroo-env-network
   kafka:
     image: wurstmeister/kafka
     hostname: kafka
@@ -27,12 +27,38 @@ services:
     environment:
       KAFKA_LISTENERS: PLAINTEXT://:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_CREATE_TOPICS: "test:1:1"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - event-deliveroo-network
+      - event-deliveroo-env-network
+  zipkin:
+    image: openzipkin/zipkin
+    hostname: zipkin
+    environment:
+      - STORAGE_TYPE=mem
+    ports:
+      - 9411:9411
+    networks:
+      - event-deliveroo-env-network
+  prometheus:
+    image: prom/prometheus
+    hostname: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    networks:
+      - event-deliveroo-env-network
+  grafana:
+    image: grafana/grafana
+    hostname: grafana
+    ports:
+      - 3000:3000
+    networks:
+      - event-deliveroo-env-network
   portainer:
     image: portainer/portainer
     hostname: portainer
@@ -46,9 +72,9 @@ services:
     environment:
       - Europe/Paris=${TZ}
     networks:
-      - event-deliveroo-network
+      - event-deliveroo-env-network
 volumes:
   data:
 networks:
-  event-deliveroo-network:
+  event-deliveroo-env-network:
     driver: overlay

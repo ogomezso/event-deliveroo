@@ -1,0 +1,28 @@
+version: '3'
+services:
+  orders:
+    image: orderapp
+    hostname: order
+    ports:
+      - 8081:8081
+    networks:
+      - event-deliveroo-app-network
+  kitchen:
+    image: kitchenapp
+    hostname: kitchen
+    ports:
+      - 8082:8082
+    networks:
+      - event-deliveroo--app-network
+  delivery:
+    image: deliveryapp
+    hostname: deliver
+    ports:
+      - 8083:8083
+    networks:
+      - event-deliveroo-app-network
+volumes:
+  data:
+networks:
+  event-deliveroo--app-network:
+    driver: overlay
