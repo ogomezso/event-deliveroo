@@ -9,7 +9,7 @@ spring:
   zipkin:
     service:
       name: delivery
-    baseUrl: http://192.168.2.10:9411/
+    baseUrl: http://192.168.1.42:9411/
   application:
     name: delivery
   sleuth:

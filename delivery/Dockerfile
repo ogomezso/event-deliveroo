@@ -3,7 +3,7 @@ FROM hirokimatsumoto/alpine-openjdk-11
 VOLUME /tmp
 
 
-ADD target/*.jar app.jar
+COPY target/*.jar app.jar
 RUN touch /app.jar
 
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
