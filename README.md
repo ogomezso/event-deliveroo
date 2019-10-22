@@ -72,6 +72,9 @@
 ````
 
 ## VER SLIDES CON REVEAL-MD
+
+Con node:
+
 ````
     $ cd slides
 

@@ -27,3 +27,45 @@
 ----
 
 - ![ing](logo-ing.jpeg)
+
+---
+
+## ¿Qué vamos a hacer hoy?
+
+----
+
+ ![WHAT???](png-que-es-2.png) ¿Qué es DEVOPS?
+ 
+---
+
+1. Cultura DEVOPS
+
+2. Herramientas Comunes
+
+3. Ciclo de Vida de un Aplicación en esta cultura.
+
+----
+
+![DOCKER](logo-docker.png) DOCKER!!!
+
+---
+
+1. Contenedores
+2. Docker 101
+3. Docker Compose / Docker Swarm
+
+---
+
+![PLAY](https://media.giphy.com/media/11sBLVxNs7v6WA/giphy.gif)
+
+----
+
+# EVENT DELIVEROO
+
+---
+
+![EVENT-DELIVEROO](event-deliveroo.jpg)
+
+---
+
+![STACK](event-deliveroo-stack.png)
