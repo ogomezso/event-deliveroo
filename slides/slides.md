@@ -69,3 +69,18 @@
 ---
 
 ![STACK](event-deliveroo-stack.png)
+
+----
+
+![WEB_COMPONENTS](web-components-logo-256x256.png) 
+# Desarrollo Front TDD & Frameworkless!!
+
+---
+
+Indice
+
+----
+
+![puppeteer](puppeteer.png)
+
+### Test End To End!, asegurandome que todo funciona!
