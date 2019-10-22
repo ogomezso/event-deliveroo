@@ -15,7 +15,7 @@
    ````
    $ cd environment
    
-   $ ./handlecontainers startenv
+   $ ./handle-containers startenv
    ````
    Con esto tendremos en nuestro entorno local:
       * Una red docker (con driver overlay) para nuestra infra. 
@@ -45,7 +45,7 @@
 ````
    $ cd environment
    
-   $ ./handlecontainers startapp
+   $ ./handle-containers startapp
 
 ````
 - Con este comando:
@@ -60,7 +60,7 @@
 ````
     $ cd environment
     
-    $ ./handlecontainers start
+    $ ./handle-containers start
 ````
 
 ## PARAR APP 
@@ -68,6 +68,12 @@
 ````
     $ cd environment
     
-    $ ./handlecontainers stop
+    $ ./handle-containers stop
 ````
 
+## VER SLIDES CON REVEAL-MD
+````
+    $ cd slides
+
+    $ reveal-md slides.md --css style.css
+````
