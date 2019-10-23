@@ -48,3 +48,8 @@ Sera borrado .idea/modules.xml
 Sera borrado .idea/workspace.xml
 Sera borrado README.md
 Sera borrado infrastructure/
+
+# Node
+node_modules
+package-lock.json
+web/dist

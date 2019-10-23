@@ -1,8 +1,7 @@
 
----
-
 ## hola!
 ![ironhack](logo-ironhack.png)
+<!-- .element: class="fragment" data-fragment-index="1" -->
 
 ---
 
@@ -32,11 +31,11 @@
 
 ## ¿Qué vamos a hacer hoy?
 
-----
+---
 
  ![WHAT???](png-que-es-2.png) ¿Qué es DEVOPS?
  
----
+----
 
 1. Cultura DEVOPS
 
@@ -44,43 +43,62 @@
 
 3. Ciclo de Vida de un Aplicación en esta cultura.
 
-----
+---
 
 ![DOCKER](logo-docker.png) DOCKER!!!
 
----
+----
 
 1. Contenedores
 2. Docker 101
 3. Docker Compose / Docker Swarm
 
----
+----
 
 ![PLAY](https://media.giphy.com/media/11sBLVxNs7v6WA/giphy.gif)
 
-----
+---
 
 # EVENT DELIVEROO
 
----
+----
 
 ![EVENT-DELIVEROO](event-deliveroo.jpg)
 
----
+----
 
 ![STACK](event-deliveroo-stack.png)
 
+---
+
+# Testing
+
 ----
 
-![WEB_COMPONENTS](web-components-logo-256x256.png) 
-# Desarrollo Front TDD & Frameworkless!!
+* Unit Tests
+* Integration Tests
+* Acceptance Tests
 
 ---
 
-Indice
+# Tools
 
 ----
 
-![puppeteer](puppeteer.png)
+* bundlers
+* Cross platform builders
+* WPA
 
-### Test End To End!, asegurandome que todo funciona!
+---
+
+# Coding
+
+----
+
+* Frameworks
+* Design Patterns
+* Web Components
+
+---
+
+# Lets build a front for our App
