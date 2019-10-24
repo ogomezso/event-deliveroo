@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -29,6 +30,7 @@ public class OrderResource {
     this.orderDas = orderDas;
   }
 
+  @CrossOrigin
   @PostMapping("/orders")
   public ResponseEntity<Mono<String>> placeOrder() throws Exception {
 
@@ -49,6 +51,7 @@ public class OrderResource {
 //  }
 
 
+  @CrossOrigin
   @GetMapping(value = "/orders", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public ResponseEntity<Flux<Order>> orderContiniousQuery() {
 
